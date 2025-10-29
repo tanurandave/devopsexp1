@@ -1,0 +1,196 @@
+⚙️ Step 1: Create Maven Project
+Using Command Line:
+mvn archetype:generate -DgroupId=com.example \
+    -DartifactId=calculator-app \
+    -DarchetypeArtifactId=maven-archetype-quickstart \
+    -DinteractiveMode=false
+
+
+✅ This creates a structure like:
+
+calculator-app/
+│
+├── pom.xml
+├── src/
+│   ├── main/
+│   │   └── java/com/example/Calculator.java
+│   └── test/
+│       └── java/com/example/CalculatorTest.java
+
+🧾 Step 2: Edit pom.xml
+
+Open the pom.xml file and make sure it includes the JUnit dependency.
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.example</groupId>
+    <artifactId>calculator-app</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <!-- JUnit 5 dependency -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.10.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.10.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+
+            <!-- Surefire Plugin for running JUnit 5 tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
+🧮 Step 3: Create Calculator Class
+
+File: src/main/java/com/example/Calculator.java
+
+package com.example;
+
+public class Calculator {
+
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    public int subtract(int a, int b) {
+        return a - b;
+    }
+
+    public int multiply(int a, int b) {
+        return a * b;
+    }
+
+    public double divide(double a, double b) {
+        if (b == 0) throw new ArithmeticException("Cannot divide by zero");
+        return a / b;
+    }
+
+    public static void main(String[] args) {
+        Calculator calc = new Calculator();
+        System.out.println("Addition: " + calc.add(10, 5));
+        System.out.println("Subtraction: " + calc.subtract(10, 5));
+        System.out.println("Multiplication: " + calc.multiply(10, 5));
+        System.out.println("Division: " + calc.divide(10, 5));
+    }
+}
+
+🧪 Step 4: Create JUnit Test Cases
+
+File: src/test/java/com/example/CalculatorTest.java
+
+package com.example;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CalculatorTest {
+
+    Calculator calc = new Calculator();
+
+    @Test
+    public void testAdd() {
+        assertEquals(15, calc.add(10, 5));
+    }
+
+    @Test
+    public void testSubtract() {
+        assertEquals(5, calc.subtract(10, 5));
+    }
+
+    @Test
+    public void testMultiply() {
+        assertEquals(50, calc.multiply(10, 5));
+    }
+
+    @Test
+    public void testDivide() {
+        assertEquals(2.0, calc.divide(10, 5));
+    }
+
+    @Test
+    public void testDivideByZero() {
+        assertThrows(ArithmeticException.class, () -> calc.divide(10, 0));
+    }
+}
+
+🧰 Step 5: Build the Application
+
+From your project root, run:
+
+mvn clean package
+
+
+✅ Maven will:
+
+Compile your Java code
+
+Run all JUnit tests
+
+Package it into a JAR file (in target/calculator-app-1.0-SNAPSHOT.jar)
+
+▶️ Step 6: Run the Application
+
+Run the packaged JAR file using:
+
+java -cp target/calculator-app-1.0-SNAPSHOT.jar com.example.Calculator
+
+
+✅ Output:
+
+Addition: 15
+Subtraction: 5
+Multiplication: 50
+Division: 2.0
+
+✅ Step 7: Verify Tests
+
+To run tests separately:
+
+mvn test
+
+
+Output (should show all tests passed):
+
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+
+🧠 Summary
+Step	Command / File	Purpose
+1	mvn archetype:generate	Create Maven project
+2	pom.xml	Add dependencies
+3	Calculator.java	Main Java logic
+4	CalculatorTest.java	JUnit test cases
+5	mvn package	Build project and run tests
+6	java -cp target/...	Run the JAR
+7	mvn test	Run JUnit tests only
