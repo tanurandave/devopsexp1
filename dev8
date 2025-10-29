@@ -1,0 +1,119 @@
+Here’s a step-by-step guide to create, test, and publish your own custom Apache HTTP Server (httpd) Docker image to Docker Hub 🚀
+
+🧩 Objective
+You will:
+
+
+Create a custom httpd image (Apache web server).
+
+
+Test it locally using Docker.
+
+
+Push it to your Docker Hub repository.
+
+
+
+⚙️ Step 1: Prerequisites
+Make sure you have:
+
+
+Docker installed and running
+
+
+A Docker Hub account (https://hub.docker.com)
+
+
+A simple HTML file to serve
+
+
+
+📁 Step 2: Create Your Project Folder
+Open your terminal or CMD and run:
+mkdir custom-httpd
+cd custom-httpd
+
+Inside this folder, create two files:
+1️⃣ index.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Custom Apache Server</title>
+</head>
+<body>
+    <h1>Welcome to My Custom Apache Web Server!</h1>
+    <p>This is a custom Docker image created for demonstration.</p>
+</body>
+</html>
+
+2️⃣ Dockerfile
+# Use official Apache (httpd) base image
+FROM httpd:latest
+
+# Copy custom HTML file to Apache's web directory
+COPY index.html /usr/local/apache2/htdocs/
+
+# Expose port 80
+EXPOSE 80
+
+# Start Apache in the foreground
+CMD ["httpd-foreground"]
+
+
+🛠️ Step 3: Build Your Custom Docker Image
+Run this command inside the project folder:
+docker build -t custom-httpd:1.0 .
+
+✅ This creates a Docker image named custom-httpd with version tag 1.0.
+
+🧪 Step 4: Test the Image Locally
+Run your image as a container:
+docker run -d -p 8080:80 custom-httpd:1.0
+
+Then open your browser and visit:
+👉 http://localhost:8080
+You should see your custom HTML page!
+To check running containers:
+docker ps
+
+To stop the container:
+docker stop <container_id>
+
+
+☁️ Step 5: Tag Your Image for Docker Hub
+Log in to Docker Hub first:
+docker login
+
+Then tag your image with your Docker Hub username and repo name:
+docker tag custom-httpd:1.0 your-dockerhub-username/custom-httpd:1.0
+
+Example:
+docker tag custom-httpd:1.0 tanujarandave/custom-httpd:1.0
+
+
+📤 Step 6: Push the Image to Docker Hub
+Push the tagged image:
+docker push your-dockerhub-username/custom-httpd:1.0
+
+Example:
+docker push tanujarandave/custom-httpd:1.0
+
+Wait for it to upload.
+You’ll see it appear in your Docker Hub repository under your account.
+
+✅ Step 7: Test Pulling from Docker Hub
+To confirm it’s uploaded correctly, remove the local image:
+docker rmi custom-httpd:1.0
+
+Then pull it again from Docker Hub:
+docker pull your-dockerhub-username/custom-httpd:1.0
+
+Run it again:
+docker run -d -p 8080:80 your-dockerhub-username/custom-httpd:1.0
+
+Visit http://localhost:8080 to confirm everything works fine.
+
+🧠 Summary
+StepCommand / ActionPurpose1FROM httpd:latestBase Apache image2COPY index.html ...Add custom web page3docker build -t custom-httpd:1.0 .Build image4docker run -p 8080:80 ...Test locally5docker tag & docker pushPublish to Docker Hub
+
+Would you like me to create a diagram (JPG) showing how this flow works — from Dockerfile → build → local test → push to Docker Hub → pull again for deployment?
