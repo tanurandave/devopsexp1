@@ -1,0 +1,108 @@
+Devops practical 1,5:
+steps:
+
+1. git init # initialize
+
+2. git config --global user.name "name" # define name to repo
+
+3. git config --global user.email "email"   # define email to repo
+
+4. git clone actual_repolink  # making clone of repo
+
+5. nano README.txt  # simple read me file in repo
+
+6. git add README.txt  # add that file to repo
+ 
+7. git commit -m "msg" # commit changes in repo
+
+8. git branch sub_branchname  # create sub branch named sub_branchname
+
+9. git checkout sub_branchname  # check whether it created or not
+
+10. nano index.html # once again create one file in sub branch in repo
+
+11. git add index.html  # add that index.html file in sub branch 
+
+12 git commit -m "msg"  # commit all changes along with msg in sub branch
+
+13. git remote add origin repo_link # set sub branch to main repo
+
+14. git push origin sub_branchname # push changes in sub branch
+
+15. git checkout master # check for root master branch
+
+16. git merge sub_branchname  # merge sub branch into root master branch
+
+17.git push origin master # again push changes to root master branch
+
+
+
+
+
+
+Devops practical 2,3:
+steps:
+
+1. git init # initialize
+
+2. git config --global user.name "name" # define name to repo
+
+3. git config --global user.email "email"   # define email to repo
+
+4. git clone actual_repolink  # making clone of repo
+
+5. nano index.txt  # simple index file in repo
+
+6. git add index.txt  # add that file to repo
+ 
+7. git commit -m "msg" # commit changes in repo
+
+8. nano index1.txt  # simple index 1 file in repo
+
+9. git add index1.txt  # add that file to repo
+ 
+10. git commit -m "msg" # commit changes in repo
+
+11. nano index3.txt  # simple  file index 3 n repo
+
+12. git add index3.txt  # add that file to repo
+ 
+13. git commit -m "msg" # commit changes in repo
+
+14. git log --online # log should visible in one go
+
+15. git reset --soft HEAD~1 # remove third commit and shift head to second commit
+
+16. git log --online # log should visible in one go
+
+17. git reset --hard HEAD~1 # remove third commit and shift head to second commit
+
+18. git log --online # log should visible in one go
+
+19. git remote add origin repo_link # set sub branch to main repo
+
+20.git branch -M main  # create main branch in repo
+
+21. git push -u origin main --force # push files in repo 
+
+
+
+
+Devops practical 4:
+steps:
+
+1. open vs code , create folder , create file, open terminal in vs code
+
+2. git init
+
+3. git config --global user.name "name" # define name to repo
+
+4. git config --global user.email "email"   # define email to repo
+
+5. git add index.html  # add that index.html
+
+6. git commit -m "msg"  # commit all changes along with msg 
+
+7. git remote add origin bitbucketrepo_link # set path to main bit bucket repo
+
+8. git push origin master # push changes in master branch
