@@ -1,0 +1,158 @@
+exp 6,7
+Step 1: Prerequisites
+
+Jenkins installed and running
+
+Git installed and configured on the Jenkins server
+
+A GitHub repository with your website code
+
+Step 2: Create Jenkinsfile
+
+Below is a basic Jenkinsfile (Pipeline script):
+
+pipeline {
+    agent any
+    
+    stages {
+        stage('Checkout Code') {
+            steps {
+                echo 'Cloning repository...'
+                git branch: 'main', url: 'https://github.com/yourusername/your-website-repo.git'
+            }
+        }
+        
+        stage('Build Website') {
+            steps {
+                echo 'Building website files...'
+                sh 'npm install'  // if using Node.js
+                sh 'npm run build' // or any static build command
+            }
+        }
+        
+        stage('Deploy Website') {
+            steps {
+                echo 'Deploying website to server...'
+                sh '''
+                    rm -rf /var/www/html/*
+                    cp -r build/* /var/www/html/
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Website deployed successfully!'
+        }
+        failure {
+            echo 'Deployment failed!'
+        }
+    }
+}
+
+🧩 Explanation
+Stage	Purpose
+Checkout Code	Clones your website code from GitHub
+Build Website	Installs dependencies and builds production files
+Deploy Website	Copies the built files to your web server directory
+Post Section	Sends messages after success/failure
+🐳 Part 2: Containerized Jenkins Pipeline for Website Updates
+
+Now we’ll use Docker containers to build and deploy your website in isolation.
+
+🧰 Step 1: Prerequisites
+
+Docker installed
+
+Jenkins running in a Docker container (or with Docker enabled)
+
+Docker Hub or a private registry to push the built image
+
+📄 Jenkinsfile (Containerized Version)
+pipeline {
+    agent {
+        docker {
+            image 'node:18' // Use Node.js container to build
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
+
+    environment {
+        IMAGE_NAME = 'yourusername/website'
+        CONTAINER_NAME = 'mywebsite'
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                echo 'Cloning repository...'
+                git branch: 'main', url: 'https://github.com/yourusername/your-website-repo.git'
+            }
+        }
+
+        stage('Build Website') {
+            steps {
+                echo 'Building website inside Node.js container...'
+                sh 'npm install'
+                sh 'npm run build'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Docker image for the website...'
+                sh 'docker build -t $IMAGE_NAME .'
+            }
+        }
+
+        stage('Deploy Container') {
+            steps {
+                echo 'Deploying container...'
+                sh '''
+                    docker stop $CONTAINER_NAME || true
+                    docker rm $CONTAINER_NAME || true
+                    docker run -d --name $CONTAINER_NAME -p 8080:80 $IMAGE_NAME
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Website container deployed successfully!'
+        }
+        failure {
+            echo 'Something went wrong in the pipeline.'
+        }
+    }
+}
+
+📦 Dockerfile (for your website project)
+
+Place this in your project root:
+
+# Use an NGINX base image
+FROM nginx:alpine
+
+# Copy build files into the NGINX HTML directory
+COPY build/ /usr/share/nginx/html/
+
+# Expose port 80
+EXPOSE 80
+
+# Start NGINX server
+CMD ["nginx", "-g", "daemon off;"]
+
+🔄 How It Works
+
+Jenkins runs the pipeline inside a Node.js container.
+
+The website is built inside the container.
+
+A Docker image is created for the website using the Dockerfile.
+
+Jenkins deploys it as a running container on port 8080.
+
+You can now access your site at:
+👉 http://localhost:8080
